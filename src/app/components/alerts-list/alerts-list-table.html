@@ -1,0 +1,86 @@
+<div class="main-content">
+  <div style="width: 60%; margin: 0px auto;font-size:300%;">Alerts</div>
+  <div class="section-content section-content-p30">
+    <div class="container-fluid">
+      <form layout="row">
+        Pick a country:
+        <br>
+        <mat-checkbox #Germany ng-model="value" checked="true" labelPosition="after">Germany
+        </mat-checkbox>
+        <br>
+        <mat-checkbox #Italy checked="true" labelPosition="after">Italy
+        </mat-checkbox>
+        <br>
+        <mat-checkbox  #Austria checked="true" labelPosition="after">Austria
+        </mat-checkbox>
+      </form>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Choose Date Range</mat-label>
+        <mat-date-range-input [rangePicker]="myRangePicker">
+          <input #From matStartDate placeholder="Start date">
+          <input #To matEndDate placeholder="End date">
+        </mat-date-range-input>
+
+        <mat-datepicker-toggle matSuffix [for]="myRangePicker"></mat-datepicker-toggle>
+        <mat-date-range-picker #myRangePicker></mat-date-range-picker>
+      </mat-form-field>
+
+      <br>
+      <button mat-raised-button color="Primary" (click)="getAlertsXls(From.value, To.value, Germany, Italy, Austria)" type="button" mdbBtn
+              color="dark"
+              mdbWavesEffect>get alerts
+      </button><button mat-raised-button color="Primary" (click)="getAlertsXls(From.value, To.value, Germany, Italy, Austria)" type="button" mdbBtn
+              color="dark"
+              mdbWavesEffect>get Active Vessels
+      </button><button mat-raised-button color="Primary" (click)="getAlertsXls(From.value, To.value, Germany, Italy, Austria)" type="button" mdbBtn
+              color="dark"
+              mdbWavesEffect>get Inactive Vessels
+      </button>
+<!--      <button mat-raised-button color="Primary" (click)="onClick(From.value, To.value, Germany, Italy, Austria)" type="button"-->
+<!--              mdbBtn color="dark"-->
+<!--              mdbWavesEffect>test input-->
+<!--      </button>-->
+
+      <table class="table">
+        <thead class="thead-dark">
+        <tr>
+          <th>
+            Vessel Name
+          </th>
+          <th>
+            IMO
+          </th>
+          <th>
+            Transaction Reference
+          </th>
+          <th>
+            Broken Rule
+          </th>
+          <th>
+            Broken Rule Date
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="allign-middle" *ngFor="let tempAlert of alerts">
+
+          <td class="allign-middle">
+            {{tempAlert.vesselName}}
+          </td>
+          <td class="allign-middle">
+            {{tempAlert.imo}}
+          </td>
+          <td>
+            {{tempAlert.ruleId}}
+          </td><td>
+            {{tempAlert.brokenRules}}
+          </td><td>
+            {{tempAlert.alertDate}}
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

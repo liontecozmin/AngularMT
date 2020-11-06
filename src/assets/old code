@@ -1,0 +1,20 @@
+onClick(value1, value2, germany, italy, austria)
+  {
+  switch (this.getCountriesNumber)
+  {
+  case 2: {console.log("2 countries selected");
+  break;}
+  case 1: {console.log("1 country selected");
+  break;}
+  default:{console.log("3 countries selected");
+  break;}
+  }
+
+  var regExp = /[a-zA-Z]/g;
+  if(value1==null ||value2==null||value1.length ==0||value2.length==0||regExp.test(value1)||regExp.test(value2))
+  console.log("retrieving all alerts")
+  else
+  console.log("reading "+ value1 +"  " +value2 +" "+ germany.checked+italy.checked+austria.checked);
+
+
+  }
