@@ -12,6 +12,7 @@ export class AlertService {
 
   private baseUrl = 'http://localhost:8081/api/alertses'
   private xlsUrl = 'http://localhost:8081/api/v1/xlsreport'
+  private csvUrl = 'http://localhost:8081/api/v1/csvreport'
   private reportUrl = 'http://localhost:8081/api/v1/report/2'
   constructor(private httpClient: HttpClient)
     {
@@ -40,13 +41,33 @@ export class AlertService {
        return this.httpClient.get<any>(this.xlsUrl+ "/"+tenant1+"/"+tenant2+"/"+dateStart+"/"+dateEnd, {responseType:'blob' as 'json'});
     }
 
-  getAlertReport(): Observable<Alerts[]>
-    {
-      console.log("alertService retrieving the report");
-      return this.httpClient.get<any>(this.reportUrl);
-    }
+    getAlertReport(dateStart,dateEnd): Observable<any>
+      {
+        console.log("alertService retrieving the report from "+ this.xlsUrl+"/"+dateStart+"/"+dateEnd);
+        return this.httpClient.get<any>(this.reportUrl+"/"+dateStart+"/"+dateEnd);
+      }
 
-}
+      getAlertReport1(tenant,dateStart,dateEnd): Observable<any>
+        {
+          console.log("alertService retrieving the report from "+ this.xlsUrl+"/"+tenant+"/"+dateStart+"/"+dateEnd);
+          return this.httpClient.get<any>(this.reportUrl+"/"+tenant+"/"+dateStart+"/"+dateEnd);
+        }
+
+
+        getAlertReport2(tenant1, tenant2,dateStart,dateEnd): Observable<any>
+                {
+                   console.log("alertService retrieving the report from "+ this.csvUrl+"/"+tenant1+"/"+tenant2+"/"+dateStart+"/"+dateEnd);
+                   return this.httpClient.get<GetResponse>(this.csvUrl, {
+                                                                           params: {
+                                                                             tenant1,
+                                                                             tenant2,
+                                                                             dateStart,
+                                                                             dateEnd
+                                                                           },
+                                                                  }).pipe(map(response => response._embedded.alertses));
+
+                }
+                }
 
 interface GetResponse
   {
