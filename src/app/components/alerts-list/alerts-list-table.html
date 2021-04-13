@@ -11,7 +11,7 @@
         <mat-checkbox #Italy checked="true" labelPosition="after">Italy
         </mat-checkbox>
         <br>
-        <mat-checkbox  #Austria checked="true" labelPosition="after">Austria
+        <mat-checkbox #Austria checked="true" labelPosition="after">Austria
         </mat-checkbox>
       </form>
 
@@ -27,20 +27,30 @@
       </mat-form-field>
 
       <br>
-      <button mat-raised-button color="Primary" (click)="getAlertsXls(From.value, To.value, Germany, Italy, Austria)" type="button" mdbBtn
+      <button mat-raised-button color="Primary" (click)="getAlertsXls(From.value, To.value, Germany, Italy, Austria)"
+              type="button" mdbBtn
               color="dark"
               mdbWavesEffect>get alerts
-      </button><button mat-raised-button color="Primary" (click)="getAlertsXls(From.value, To.value, Germany, Italy, Austria)" type="button" mdbBtn
+      </button>
+      <button mat-raised-button color="Primary" (click)="getAlertsXls(From.value, To.value, Germany, Italy, Austria)"
+              type="button" mdbBtn
               color="dark"
               mdbWavesEffect>get Active Vessels
-      </button><button mat-raised-button color="Primary" (click)="getAlertsXls(From.value, To.value, Germany, Italy, Austria)" type="button" mdbBtn
+      </button>
+      <button mat-raised-button color="Primary" (click)="getAlertsXls(From.value, To.value, Germany, Italy, Austria)"
+              type="button" mdbBtn
               color="dark"
               mdbWavesEffect>get Inactive Vessels
       </button>
-<!--      <button mat-raised-button color="Primary" (click)="onClick(From.value, To.value, Germany, Italy, Austria)" type="button"-->
-<!--              mdbBtn color="dark"-->
-<!--              mdbWavesEffect>test input-->
-<!--      </button>-->
+      <button mat-raised-button color="Primary" (click)="getAlertsXls(From.value, To.value, Germany, Italy, Austria)"
+              type="button" mdbBtn
+              color="dark"
+              mdbWavesEffect>get KPI
+      </button>
+      <!--      <button mat-raised-button color="Primary" (click)="onClick(From.value, To.value, Germany, Italy, Austria)" type="button"-->
+      <!--              mdbBtn color="dark"-->
+      <!--              mdbWavesEffect>test input-->
+      <!--      </button>-->
 
       <table class="table">
         <thead class="thead-dark">
@@ -73,9 +83,11 @@
           </td>
           <td>
             {{tempAlert.ruleId}}
-          </td><td>
+          </td>
+          <td>
             {{tempAlert.brokenRules}}
-          </td><td>
+          </td>
+          <td>
             {{tempAlert.alertDate}}
           </td>
         </tr>

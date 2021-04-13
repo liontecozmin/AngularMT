@@ -18,11 +18,13 @@ export class AlertsListComponent implements OnInit
 
   ngOnInit(): void
   {
-    //this.alertsReport();
+    this.listAlerts();
   }
 
   getAlertsXls(dateStart:string, dateEnd:string, germany, italy, austria):void
-  {   this.listAlerts();
+  {
+      //this.listAlerts();
+      //this.alertService.getAlertList();
       console.log("getting the xls")
       console.log(this.getCountriesNumber(germany,italy,austria))
 
@@ -49,8 +51,12 @@ export class AlertsListComponent implements OnInit
                                        this.downloadFile(response)})
   break;}
   case "011": {console.log("2 countries selected");
+  this.alertService.getAlertReport2(2,3,dateStart,dateEnd).subscribe(response => console.log(response));
   this.alertService.getAlertXls2(2,3,dateStart,dateEnd).subscribe(response => {
-                                       this.downloadFile(response)})
+                                       this.downloadFile(response)
+                                       });
+                                       console.log('sal');
+
   break;}
   case "100": {console.log("1 country selected");
     this.alertService.getAlertXls1(1,dateStart,dateEnd).subscribe(response => {
@@ -92,13 +98,7 @@ export class AlertsListComponent implements OnInit
     })
   }
 
-  alertsReport()
-  {
-    this.alertService.getAlertReport().subscribe(data =>
-    {
-      this.alerts = data
-    })
-  }
+
 
   getCountriesNumber(germany, italy, austria):string
     {
