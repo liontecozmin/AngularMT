@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AlertService} from "../../services/alert.service";
 import {Alerts} from "../../common/alertses";
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-alerts-list',
@@ -21,108 +21,238 @@ export class AlertsListComponent implements OnInit
     this.listAlerts();
   }
 
-  getAlertsXls(dateStart:string, dateEnd:string, germany, italy, austria):void
+  getAlertsXls(dateStart: string, dateEnd: string, germany, italy, austria): void
   {
-      //this.listAlerts();
-      //this.alertService.getAlertList();
-      console.log("getting the xls")
-      console.log(this.getCountriesNumber(germany,italy,austria))
+    //this.listAlerts();
+    //this.alertService.getAlertList();
+    console.log('getting the alert report');
+    console.log(this.getCountriesNumber(germany, italy, austria));
 
-      var regExp = /[a-zA-Z]/g;
+    const dates = this.getDates(dateStart, dateEnd);
+    dateStart = dates.dateStart;
+    dateEnd = dates.dateEnd;
 
-      //INVALID DATE
-        if(dateStart==null ||dateEnd==null||dateStart.length ==0||dateEnd.length==0||regExp.test(dateStart)||regExp.test(dateEnd))
-        {dateStart="01.01.2019"
-        dateEnd="01.01.3000"}
-        else{
-      dateStart=dateStart.replace(/\//g,'.')
-      dateEnd=dateEnd.replace(/\//g,'.')}
-      console.log(dateStart)
-      //CHECK DATE VALUES
+    this.callAlertsApi(germany, italy, austria, dateStart, dateEnd);
+  }
 
-  switch (this.getCountriesNumber(germany,italy,austria))
+  getBrokenRulesXls(dateStart: string, dateEnd: string, germany, italy, austria): void
   {
-  case "001": {console.log("1 country selected");
-  this.alertService.getAlertXls1(3,dateStart,dateEnd).subscribe(response => {
-                                       this.downloadFile(response)})
-  break;}
-  case "010": {console.log("1 country selected");
-  this.alertService.getAlertXls1(2,dateStart,dateEnd).subscribe(response => {
-                                       this.downloadFile(response)})
-  break;}
-  case "011": {console.log("2 countries selected");
-  this.alertService.getAlertReport2(2,3,dateStart,dateEnd).subscribe(response => console.log(response));
-  this.alertService.getAlertXls2(2,3,dateStart,dateEnd).subscribe(response => {
-                                       this.downloadFile(response)
-                                       });
-                                       console.log('sal');
+    //this.listAlerts();
+    //this.alertService.getAlertList();a
+    console.log('getting the broken rule report');
+    console.log(this.getCountriesNumber(germany, italy, austria));
 
-  break;}
-  case "100": {console.log("1 country selected");
-    this.alertService.getAlertXls1(1,dateStart,dateEnd).subscribe(response => {
-                                         this.downloadFile(response)})
-    break;}
-    case "101": {console.log("2 countries selected");
-    this.alertService.getAlertXls2(1,3,dateStart,dateEnd).subscribe(response => {
-                                         this.downloadFile(response)})
-    break;}
-    case "110": {console.log("2 countries selected");
-    this.alertService.getAlertXls2(1,2,dateStart,dateEnd).subscribe(response => {
-                                         this.downloadFile(response)})
-    break;}
-  default:{console.log("3 countries selected");
-  this.alertService.getAlertXls(dateStart,dateEnd).subscribe(response => {
-                                       this.downloadFile(response)})
-  break;}
+    const dates = this.getDates(dateStart, dateEnd);
+    dateStart = dates.dateStart;
+    dateEnd = dates.dateEnd;
+
+    this.callBrokenRulesApi(germany, italy, austria, dateStart, dateEnd);
   }
 
 
+  private callAlertsApi(germany, italy, austria, dateStart: string, dateEnd: string): void
+  {
+    switch (this.getCountriesNumber(germany, italy, austria))
+    {
+      case '001':
+      {
+        console.log('1 country selected');
+        this.alertService.getAlertXls1(3, dateStart, dateEnd).subscribe(response =>
+        {
+          this.downloadFile(response);
+        });
+        break;
+      }
+      case '010':
+      {
+        console.log('1 country selected');
+        this.alertService.getAlertXls1(2, dateStart, dateEnd).subscribe(response =>
+        {
+          this.downloadFile(response);
+        });
+        break;
+      }
+      case '011':
+      {
+        console.log('2 countries selected');
+        this.alertService.getAlertCsv2(2, 3, dateStart, dateEnd).subscribe(response => console.log(response));
+        this.alertService.getAlertXls2(2, 3, dateStart, dateEnd).subscribe(response =>
+        {
+          this.downloadFile(response);
+        });
+        break;
+      }
+      case '100':
+      {
+        console.log('1 country selected');
+        this.alertService.getAlertXls1(1, dateStart, dateEnd).subscribe(response =>
+        {
+          this.downloadFile(response);
+        });
+        break;
+      }
+      case '101':
+      {
+        console.log('2 countries selected');
+        this.alertService.getAlertXls2(1, 3, dateStart, dateEnd).subscribe(response =>
+        {
+          this.downloadFile(response);
+        });
+        break;
+      }
+      case '110':
+      {
+        console.log('2 countries selected');
+        this.alertService.getAlertXls2(1, 2, dateStart, dateEnd).subscribe(response =>
+        {
+          this.downloadFile(response);
+        });
+        break;
+      }
+      default:
+      {
+        console.log('3 countries selected');
+        this.alertService.getAlertXls(dateStart, dateEnd).subscribe(response =>
+        {
+          this.downloadFile(response);
+        });
+        break;
+      }
+    }
   }
 
-
-  downloadFile(data: any)
+  private callBrokenRulesApi(germany, italy, austria, dateStart: string, dateEnd: string): void
   {
-    let today = new Date().toLocaleDateString()
-    const blob = new Blob([data], { type: '.xlsx' });
-    const file = new File([blob], "alertReport" +today+ '.xlsx', { type: 'application/vnd.ms.excel' });
+    switch (this.getCountriesNumber(germany, italy, austria))
+    {
+      case '001':
+      {
+        console.log('austria selected');
+        this.alertService.getBrokenRule1(3, dateStart, dateEnd).subscribe(response =>
+        {
+          this.downloadFile(response);
+        });
+        break;
+      }
+      case '010':
+      {
+        console.log('italy selected');
+        this.alertService.getBrokenRule1(2, dateStart, dateEnd).subscribe(response =>
+        {
+          this.downloadFile(response);
+        });
+        break;
+      }
+      case '011':
+      {
+        console.log('italy and austria selected');
+        // this.alertService.getAlertCsv2(2, 3, dateStart, dateEnd).subscribe(response => console.log(response));
+        this.alertService.getBrokenRule2(2, 3, dateStart, dateEnd).subscribe(response =>
+        {
+          this.downloadFile(response);
+        });
+        break;
+      }
+      case '100':
+      {
+        console.log('germany selected');
+        this.alertService.getBrokenRule1(1, dateStart, dateEnd).subscribe(response =>
+        {
+          this.downloadFile(response);
+        });
+        break;
+      }
+      case '101':
+      {
+        console.log('germany and austria selected');
+        this.alertService.getBrokenRule2(1, 3, dateStart, dateEnd).subscribe(response =>
+        {
+          this.downloadFile(response);
+        });
+        break;
+      }
+      case '110':
+      {
+        console.log('germany and italy selected');
+        this.alertService.getBrokenRule2(1, 2, dateStart, dateEnd).subscribe(response =>
+        {
+          this.downloadFile(response);
+        });
+        break;
+      }
+      default:
+      {
+        console.log('3 countries selected');
+        this.alertService.getBrokenRule(dateStart, dateEnd).subscribe(response =>
+        {
+          this.downloadFile(response);
+        });
+        break;
+      }
+    }
+  }
+
+  private getDates(dateStart: string, dateEnd: string)
+  {
+    const regExp = /[a-zA-Z]/g;
+
+    // invalid date
+    if (dateStart == null || dateEnd == null || dateStart.length == 0 || dateEnd.length == 0 ||
+      regExp.test(dateStart) || regExp.test(dateEnd))
+    {
+      dateStart = '01.01.2019';
+      dateEnd = '01.01.3000';
+    } else
+    {
+      dateStart = dateStart.replace(/\//g, '.');
+      dateEnd = dateEnd.replace(/\//g, '.');
+    }
+    console.log('startDate is' + dateStart);
+    return {dateStart, dateEnd};
+  }
+
+  downloadFile(data: any): void
+  {
+    const today = new Date().toLocaleDateString();
+    const blob = new Blob([data], {type: '.xlsx'});
+    const file = new File([blob], 'alertReport' + today + '.xlsx', {type: 'application/vnd.ms.excel'});
     saveAs(file);
   }
 
-
-
-  listAlerts()
+  listAlerts(): void
   {
     this.alertService.getAlertList().subscribe(data =>
     {
-      this.alerts = data
-    })
+      this.alerts = data;
+    });
   }
 
-
-
-  getCountriesNumber(germany, italy, austria):string
+// create a code for identifying the countries
+  getCountriesNumber(germany, italy, austria): string
+  {
+    let countryCode: string = '';
+    if (germany.checked)
     {
-      let countries:string=germany.checked+italy.checked+austria.checked;
-      let countryCode:string ="";
-      if(germany.checked)
-      {countryCode=countryCode+1;
-      }
-      else
-      {countryCode=countryCode+0;
-      }
-      if(italy.checked)
-      {countryCode=countryCode+1;
-      }
-      else
-      {countryCode=countryCode+0;
-      }
-      if(austria.checked)
-      {countryCode=countryCode+1;
-      }
-      else
-      {countryCode=countryCode+0;
-      }
-      console.log("country code is "+countryCode)
-      return countryCode;
+      countryCode = countryCode + 1;
+    } else
+    {
+      countryCode = countryCode + 0;
     }
+    if (italy.checked)
+    {
+      countryCode = countryCode + 1;
+    } else
+    {
+      countryCode = countryCode + 0;
+    }
+    if (austria.checked)
+    {
+      countryCode = countryCode + 1;
+    } else
+    {
+      countryCode = countryCode + 0;
+    }
+    console.log('country code is ' + countryCode);
+    return countryCode;
+  }
 }
